@@ -19,9 +19,9 @@ export const Card = ({ book }) => {
         />
         <div className="px-6 py-4  ">
           <div className="font-bold text-xl mb-2">{book.bookName}</div>
-          <p className="text-gray-700 text-base">{book.isbnNumber}</p>
-          <p className="text-gray-700 text-base">{book.authorName}</p>
-          <p className="text-gray-700 text-base">{book.publishedAt}</p>
+          <p className="text-slate-400 text-base">{book.isbnNumber}</p>
+          <p className="text-slate-400 text-base">{book.authorName}</p>
+          <p className="text-slate-400 text-base">{book.publishedAt}</p>
         </div>
         <Link
           to={`/book/${book._id}`}
