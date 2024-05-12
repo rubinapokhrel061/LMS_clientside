@@ -2,6 +2,7 @@ import axios from "axios";
 import { Navbar } from "../Component/Navbar";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { backendUrl } from "../config";
 export const AddBook = () => {
   //1st method
 
@@ -77,7 +78,7 @@ export const AddBook = () => {
       formData.append(key, value);
     });
     formData.append("image", image);
-    const response = await axios.post("http://localhost:3000/book", formData);
+    const response = await axios.post(`${backendUrl}/book`, formData);
     if (response.status === 200) {
       navigate("/");
     } else {

@@ -3,6 +3,7 @@ import { Navbar } from "../Component/Navbar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./SingleBook.css";
+import { backendUrl } from "../config";
 
 const SingleBook = () => {
   const { id } = useParams();
@@ -11,14 +12,14 @@ const SingleBook = () => {
   const [book, setBook] = useState({});
   console.log(id);
   const fetchBook = async () => {
-    const response = await axios.get(`http://localhost:3000/book/${id}`);
+    const response = await axios.get(`${backendUrl}/book/${id}`);
     if (response.status === 200) {
       setBook(response.data.data);
     }
   };
 
   const DeleteBook = async () => {
-    const response = await axios.delete(`http://localhost:3000/book/${id}`);
+    const response = await axios.delete(`${backendUrl}/book/${id}`);
 
     if (response.status === 200) {
       navigate("/");

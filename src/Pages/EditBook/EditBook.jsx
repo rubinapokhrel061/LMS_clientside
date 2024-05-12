@@ -2,6 +2,7 @@ import axios from "axios";
 import { Navbar } from "../Component/Navbar";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { backendUrl } from "../config";
 export const EditBook = () => {
   //destructure id
   const { id } = useParams();
@@ -33,10 +34,7 @@ export const EditBook = () => {
       formData.append(key, value);
     });
     formData.append("image", image);
-    const response = await axios.patch(
-      `http://localhost:3000/book/${id}`,
-      formData
-    );
+    const response = await axios.patch(`${backendUrl}/book/${id}`, formData);
     if (response.status === 200) {
       navigate(`/book/${id}`);
     } else {
@@ -45,7 +43,7 @@ export const EditBook = () => {
   };
 
   const fetchBook = async () => {
-    const response = await axios.get(`http://localhost:3000/book/${id}`);
+    const response = await axios.get(`${backendUrl}/book/${id}`);
     if (response.status === 200) {
       setData(response.data.data);
       console.log(response.data.data);
