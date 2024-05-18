@@ -50,8 +50,8 @@ export const AddBook = () => {
   const [data, setData] = useState({
     bookName: "",
     bookPrice: "",
-    isbnNumber: null,
-    auth0rName: "",
+    isbnNumber: "",
+    authorName: "",
     publishedAt: "",
     pubilcation: "",
     // bookName,
@@ -61,6 +61,12 @@ export const AddBook = () => {
     // publishedAt,
     // publication,
   });
+
+  const [formErr, setFormErr] = useState({
+    bookName: "",
+    isbnNumber: "",
+  });
+
   const [image, setImage] = useState(null);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,21 +75,55 @@ export const AddBook = () => {
       [name]: value,
     });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    //object ma vako key value pair lai array ma convert garxa
-    //Object.entries(data)
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    formData.append("image", image);
-    const response = await axios.post(`${backendUrl}/book`, formData);
-    if (response.status === 200) {
-      navigate("/");
+
+    let inputErr = {
+      bookName: "",
+      isbnNumber: "",
+    };
+    const imageFile = e.target.image.files[0];
+
+    if (!data.bookName || !data.isbnNumber) {
+      setFormErr({
+        ...inputErr,
+        bookName: "BookName is required!",
+        isbnNumber: "ISBN-Number is required!",
+      });
+    } else if (!imageFile.name.match(/\.(jpg|jpeg|png)$/i)) {
+      console.log("Select a valid image (JPEG or PNG).");
     } else {
-      alert("Something Went Wrong");
+      const formData = new FormData();
+
+      //object ma vako key value pair lai array ma convert garxa
+      //Object.entries(data)
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      formData.append("image", image);
+      const response = await axios.post(`${backendUrl}/book`, formData);
+      if (response.status === 200) {
+        navigate("/");
+      } else {
+        alert("Something Went Wrong");
+      }
     }
+
+    // const formData = new FormData();
+
+    // //object ma vako key value pair lai array ma convert garxa
+    // //Object.entries(data)
+    // Object.entries(data).forEach(([key, value]) => {
+    //   formData.append(key, value);
+    // });
+    // formData.append("image", image);
+    // const response = await axios.post(`${backendUrl}/book`, formData);
+    // if (response.status === 200) {
+    //   navigate("/");
+    // } else {
+    //   alert("Something Went Wrong");
+    // }
   };
 
   return (
@@ -117,9 +157,14 @@ export const AddBook = () => {
                       id="bookName"
                       onChange={handleChange}
                       className="w-full mt-2 px-3 py-2  bg-transparent outline-none border focus:border-sky-300 shadow-sm rounded-lg"
-                      placeholder="Please Enter unique Book Name"
+                      placeholder="Enter Book Name"
                       required=""
                     />
+                    {formErr.bookName && (
+                      <span className="text-[#e74c3c] text-[14px] mt-[5px] block">
+                        {formErr.bookName}
+                      </span>
+                    )}
                   </div>
                   <div>
                     <label htmlFor="bookPrice" className="font-medium">
@@ -130,7 +175,7 @@ export const AddBook = () => {
                       name="bookPrice"
                       id="bookPrice"
                       onChange={handleChange}
-                      placeholder="bookPrice"
+                      placeholder="Enter bookPrice"
                       className="w-full mt-2 px-3 py-2  bg-transparent outline-none border focus:border-sky-300 shadow-sm rounded-lg"
                       required=""
                     />
@@ -144,11 +189,16 @@ export const AddBook = () => {
                       type="number"
                       name="isbnNumber"
                       id="isbnNumber"
-                      placeholder="isbnNumber"
+                      placeholder="Enter ISBN-Number"
                       onChange={handleChange}
                       className="w-full mt-2 px-3 py-2  bg-transparent outline-none border focus:border-sky-300 shadow-sm rounded-lg"
                       required=""
                     />
+                    {formErr.isbnNumber && (
+                      <span className="text-[#e74c3c] text-[14px] mt-[5px] block">
+                        {formErr.isbnNumber}
+                      </span>
+                    )}
                   </div>
 
                   <div>
@@ -160,7 +210,7 @@ export const AddBook = () => {
                       name="authorName"
                       id="authorName"
                       onChange={handleChange}
-                      placeholder="authorName"
+                      placeholder="Enter authorName"
                       className="w-full mt-2 px-3 py-2  bg-transparent outline-none border focus:border-sky-300 shadow-sm rounded-lg"
                       required=""
                     />
@@ -174,7 +224,6 @@ export const AddBook = () => {
                       name="publishedAt"
                       id="publishedAt"
                       onChange={handleChange}
-                      placeholder="publishedAt"
                       className="w-full mt-2 px-3 py-2  bg-transparent outline-none border focus:border-sky-300 shadow-sm rounded-lg"
                       required=""
                     />
@@ -188,7 +237,7 @@ export const AddBook = () => {
                       id="publication"
                       type="text"
                       onChange={handleChange}
-                      placeholder="publication"
+                      placeholder="Enter publication"
                       className="w-full mt-2 px-3 py-2  bg-transparent outline-none border focus:border-sky-300 shadow-sm rounded-lg"
                       required=""
                     />
@@ -206,7 +255,12 @@ export const AddBook = () => {
                     placeholder="imageUrl"
                     className="w-full mt-2 px-3 py-2  bg-transparent outline-none border focus:border-sky-300 shadow-sm rounded-lg"
                     required=""
+                    accept=".jpg, .jpeg, .png"
                   />
+
+                  <span className="text-[#6bcc5a] text-[12px] mt-[5px] block">
+                    Types of image must be jpg, png & jpeg
+                  </span>
                 </div>
                 <button
                   type="submit"

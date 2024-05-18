@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { backendUrl } from "../config";
 export const Home = () => {
   const [books, setBooks] = useState([]);
+
   const fetchBooks = async () => {
     const response = await axios.get(`${backendUrl}/book`);
     console.log(response.data.data);
@@ -12,6 +13,14 @@ export const Home = () => {
       setBooks(response.data.data);
     }
   };
+
+  // const fetchBooks = async () => {
+  //   const response = await axios.get(`${backendUrl}/book`);
+  //   console.log(response.data.data);
+  //   if (response.status === 200) {
+  //     setBooks(response.data.data);
+  //   }
+  // };
   // console.log(books);
   useEffect(() => {
     fetchBooks();

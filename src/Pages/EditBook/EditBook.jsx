@@ -27,6 +27,7 @@ export const EditBook = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     //object ma vako key value pair lai array ma convert garxa
     //Object.entries(data)
@@ -178,6 +179,9 @@ export const EditBook = () => {
                     className="w-full mt-2 px-3 py-2  bg-transparent outline-none border focus:border-sky-300 shadow-sm rounded-lg"
                     required=""
                   />
+                  <span className="text-[#6bcc5a] text-[12px] mt-[5px] block">
+                    Types of image must be jpg, png & jpeg
+                  </span>
                 </div>
                 <button
                   type="submit"
