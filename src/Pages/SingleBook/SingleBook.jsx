@@ -43,7 +43,7 @@ const SingleBook = () => {
             src={
               book.imageUrl
                 ? book.imageUrl
-                : "https://www.abnews24bd.com/images/page-not-found.jpg"
+                : "https://salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png"
             }
             alt={book.bookName}
           />

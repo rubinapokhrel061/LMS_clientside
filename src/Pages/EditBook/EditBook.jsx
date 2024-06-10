@@ -3,6 +3,7 @@ import { Navbar } from "../Component/Navbar";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { backendUrl } from "../config";
+import toast from "react-hot-toast";
 export const EditBook = () => {
   //destructure id
   const { id } = useParams();
@@ -11,7 +12,7 @@ export const EditBook = () => {
   const [data, setData] = useState({
     bookName: "",
     bookPrice: "",
-    isbnNumber: null,
+    isbnNumber: "",
     authorName: "",
     publishedAt: "",
     publication: "",
@@ -26,20 +27,26 @@ export const EditBook = () => {
     console.log(data);
   };
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const formData = new FormData();
-    //object ma vako key value pair lai array ma convert garxa
-    //Object.entries(data)
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    formData.append("image", image);
-    const response = await axios.patch(`${backendUrl}/book/${id}`, formData);
-    if (response.status === 200) {
-      navigate(`/book/${id}`);
-    } else {
-      alert("Something Went Wrong");
+      const formData = new FormData();
+      //object ma vako key value pair lai array ma convert garxa
+      //Object.entries(data)
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      formData.append("image", image);
+      const response = await axios.patch(`${backendUrl}/book/${id}`, formData);
+      if (response.status === 200) {
+        navigate(`/book/${id}`);
+        toast.success("Book Created Successfully");
+      } else {
+        toast.error("somthing went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("somthing went wrong ");
     }
   };
 

@@ -3,6 +3,7 @@ import { Navbar } from "../Component/Navbar";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { backendUrl } from "../config";
+import toast, { Toaster } from "react-hot-toast";
 export const AddBook = () => {
   //1st method
 
@@ -77,53 +78,41 @@ export const AddBook = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     let inputErr = {
       bookName: "",
       isbnNumber: "",
     };
-    const imageFile = e.target.image.files[0];
+    try {
+      // const imageFile = e.target.image.files[0];
 
-    if (!data.bookName || !data.isbnNumber) {
-      setFormErr({
-        ...inputErr,
-        bookName: "BookName is required!",
-        isbnNumber: "ISBN-Number is required!",
-      });
-    } else if (!imageFile.name.match(/\.(jpg|jpeg|png)$/i)) {
-      console.log("Select a valid image (JPEG or PNG).");
-    } else {
-      const formData = new FormData();
-
-      //object ma vako key value pair lai array ma convert garxa
-      //Object.entries(data)
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      formData.append("image", image);
-      const response = await axios.post(`${backendUrl}/book`, formData);
-      if (response.status === 200) {
-        navigate("/");
+      e.preventDefault();
+      if (!data.bookName || !data.isbnNumber) {
+        setFormErr({
+          ...inputErr,
+          bookName: "BookName is required!",
+          isbnNumber: "ISBN-Number is required!",
+        });
       } else {
-        alert("Something Went Wrong");
+        const formData = new FormData();
+
+        //object ma vako key value pair lai array ma convert garxa
+        //Object.entries(data)
+        Object.entries(data).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+        formData.append("image", image);
+        const response = await axios.post(`${backendUrl}/book`, formData);
+        if (response.status === 200) {
+          navigate("/");
+          toast.success("Book Created Successfully");
+        } else {
+          toast.error("somthing went wrong");
+        }
       }
+    } catch (error) {
+      console.log(error);
+      toast.error("somthing went wrong ");
     }
-
-    // const formData = new FormData();
-
-    // //object ma vako key value pair lai array ma convert garxa
-    // //Object.entries(data)
-    // Object.entries(data).forEach(([key, value]) => {
-    //   formData.append(key, value);
-    // });
-    // formData.append("image", image);
-    // const response = await axios.post(`${backendUrl}/book`, formData);
-    // if (response.status === 200) {
-    //   navigate("/");
-    // } else {
-    //   alert("Something Went Wrong");
-    // }
   };
 
   return (
@@ -269,6 +258,8 @@ export const AddBook = () => {
                   Add book
                 </button>
               </form>
+
+              <Toaster />
             </div>
           </div>
         </div>

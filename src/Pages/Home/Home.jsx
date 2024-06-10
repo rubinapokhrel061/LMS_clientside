@@ -14,14 +14,6 @@ export const Home = () => {
     }
   };
 
-  // const fetchBooks = async () => {
-  //   const response = await axios.get(`${backendUrl}/book`);
-  //   console.log(response.data.data);
-  //   if (response.status === 200) {
-  //     setBooks(response.data.data);
-  //   }
-  // };
-  // console.log(books);
   useEffect(() => {
     fetchBooks();
   }, []);
